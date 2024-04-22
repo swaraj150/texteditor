@@ -1,1 +1,1 @@
-## Text Editor with CLI
+# Text Editor with CLI
