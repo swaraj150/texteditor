@@ -12,7 +12,8 @@ eKeys Input::getKeys() const{
 }
 
 void Input::userinput(){
-    printf("\033[2J");
+    
+
     
     while(true){
         #ifdef _WIN32
@@ -109,4 +110,15 @@ void Input::userinput(){
 
 Text Input::getText()const{
     return t;
+}
+void Input::setText(Text t1){
+    t=t1;
+}
+
+Cursor Input::getCursor()const{
+    return cursor;
+}
+
+void Input::setCursor(Cursor c){
+    cursor=c;
 }

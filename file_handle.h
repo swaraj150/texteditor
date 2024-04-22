@@ -8,7 +8,7 @@ class FileHandle{
         FileHandle();
         void saveFile(std::string name);
         void renameFile(std::string name);
-        void loadFile(std::string path);
+        std::pair<int,int> loadFile(std::string path);
         Text getText()const;
         void setText(Text t);
         

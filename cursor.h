@@ -5,6 +5,7 @@ class Cursor{
     public:
         int cursorX,cursorY;
         Cursor();
+        Cursor(int x,int y);
         std::pair<int,int> getCursorPosition() const;  
         void setCursorPosition(Cursor* c,int x,int y);  
         void moveUp(Cursor* c);

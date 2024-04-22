@@ -23,4 +23,7 @@ class Input{
         eKeys getKeys()const;
         void userinput();
         Text getText()const;
+        void setText(Text t);
+        Cursor getCursor()const;
+        void setCursor(Cursor c);
 };

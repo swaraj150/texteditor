@@ -2,6 +2,7 @@
 
 
 Cursor::Cursor():cursorX(1),cursorY(1){}
+Cursor::Cursor(int x,int y):cursorX(x),cursorY(y){}
 
 std::pair<int,int> Cursor::getCursorPosition() const{
     return std::make_pair(cursorX,cursorY);
