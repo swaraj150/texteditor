@@ -7,6 +7,7 @@ class Text{
         GapBuffer g;
         std::vector<int> ptrs;
         std::map<int,std::pair<int,int>> visited;
+         
         // Cursor c;
     public:
         Text();
@@ -15,6 +16,7 @@ class Text{
         void fillstring(std::string c);
         void removechar(std::pair<int,int> pos);
         GapBuffer getbuffer() const;
+        std::map<int,std::pair<int,int>> getVisited()const;
         // Cursor getcursor() const;
         // void setCursor(Cursor c1);
         // Cursor getCursor();
@@ -26,7 +28,7 @@ class Text{
         // void pastetext(std::vector<GapBuffer> g1);
         // void undo();
         // void redo();
-        
+    
         
 
           

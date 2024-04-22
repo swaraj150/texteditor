@@ -71,8 +71,8 @@ void GapBuffer::move(int position)
             buffer[left - 1] = buffer[right];
             buffer[right] = '_';
         }
-        std::cout<<"from else\n";
-        display();
+        // std::cout<<"from else\n";
+        // display();
     }
     
 
@@ -97,19 +97,32 @@ void GapBuffer::remove(int position)
     if (position < left)
     {
         move_left(position);
-        buffer[++right] = '_';
+        if(right<buffer.size()) buffer[++right] = '_';
+        else buffer[right]='_';
     }
     else if (position > right)
     {
         move_right(position);
-        buffer[--left] = '_';
+        if(left>0) buffer[--left] = '_';
+        else buffer[left]='_';
+    }
+    else{
+        while(position!=left){
+            left++, right++;
+            buffer[left - 1] = buffer[right];
+            buffer[right] = '_';
+        }
+        if(right<buffer.size()) buffer[++right] = '_';
+        else buffer[right]='_';
     }
 }
 void GapBuffer::display()
 {
     for (auto i : buffer)
     {
-        std::cout << i << " ";
+        if(i=='\n') std::cout<<'*';
+        else std::cout << i << " ";
+
     }
     std::cout << "\n";
 }

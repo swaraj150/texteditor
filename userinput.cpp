@@ -65,8 +65,23 @@ void Input::userinput(){
 
         }
         else if(key==BACKSPACE){
+            
             std::cout << "\b \b";
+            
             cursor.moveLeft(&cursor); 
+            auto visited=t.getVisited();
+            auto pos=cursor.getCursorPosition();
+            int x2=visited[pos.first].second;
+            int x1=visited[pos.first].first;
+            
+            t.removechar(cursor.getCursorPosition());
+            if(x2==x1){
+                cursor.setCursorPosition(&cursor,pos.first-1,x2-1);
+            }
+            // if(!t.getVisited().count(cursor.getCursorPosition().first)){
+            //     cursor.setCursorPosition(&cursor,t.getVisited()[cursor.getCursorPosition().first].first,t.getVisited()[cursor.getCursorPosition().first].second);
+            // }
+
             
         }
         else if(key==SPACE){

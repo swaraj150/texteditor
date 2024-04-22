@@ -59,6 +59,25 @@ void Text::fillchar(char c1,std::pair<int,int> pos){
 
 void Text::removechar(std::pair<int,int> pos){
     
+    if(!visited.count(pos.first)){
+        if(pos.first==1) return;
+        g.remove(visited[pos.first-1].second);
+        return;
+    }
+    int x2=visited[pos.first].second;
+    int x1=visited[pos.first].first;
+    int position=ptrs[pos.first]+pos.second-1;
+    if(x1==x2){
+        position--;
+    }
+    g.remove(position);
+    if(visited[pos.first].second<=visited[pos.first].first){
+        visited.erase(pos.first);
+        ptrs[pos.first]=-1;
+    }
+    else{
+        visited[pos.first].second--;
+    }
 }
 void Text::fillstring(std::string str){
 
@@ -75,7 +94,9 @@ void Text::display(){
 GapBuffer Text::getbuffer() const{
     return g;
 }
-
+std::map<int,std::pair<int,int>> Text::getVisited()const{
+    return this->visited;
+}
 
 // int main(){
 //     Text t;
@@ -111,8 +132,23 @@ GapBuffer Text::getbuffer() const{
 //     t.fillchar('7',{2,2});
 //     t.fillchar('8',{2,3});
 //     t.fillchar('y',{1,4});
-//     t.display();
 
+//     t.removechar({2,3});
+//     t.display();
+//     std::cout<<"\n";
+//     t.removechar({2,2});
+//     t.display();
+//     std::cout<<"\n";
+//     t.removechar({2,1});
+//     // t.display();
+//     t.getbuffer().display();
+//     std::cout<<"\n";
+//     t.removechar({2,1});
+//     // t.display();
+//     t.getbuffer().display();
+//     std::cout<<"\n";
+//     t.fillchar('z',{2,1});
+//     t.display();
 //     // std::cout<<"\n";
 //     // t.getbuffer().display();
 // }
