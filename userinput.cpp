@@ -14,7 +14,7 @@ eKeys Input::getKeys() const{
 void Input::userinput(){
     
 
-    
+    std::cout << "\033["<< "@";
     while(true){
         #ifdef _WIN32
             int key=_getch();

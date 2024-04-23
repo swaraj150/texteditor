@@ -132,7 +132,9 @@ std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
     std::vector<std::pair<char,int>> positions;
     int line=0, flag=0;
     for(char c:buffer){
+
         if(c=='\n'){
+
             if(!flag){
                 int j=i.second;
                 line=i.first;
@@ -141,7 +143,7 @@ std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
                 // std::cout<<visited[i.first].first<<" "<<visited[i.first].second<<"\n";
                 int offset=(visited[i.first].second-visited[i.first].first)-(i.second-1);
                 g.move(visited[i.first].first+j+offset-1);
-                // g.display();
+                g.display();
                 int n=visited[i.first].first+j+offset-1;
                 for(int k=visited[i.first].first+(j-1);k<n;k++){
                     char o=g.buffer[k];
@@ -176,44 +178,40 @@ std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
     int s=0;
     for(auto j:positions){
         char c2=j.first;
-        fillchar(j.first,{i.first,j.second});
-        s=j.second;
+        fillchar(j.first,{i.first,i.second});
+        i.second++;
+        s=i.second;
         // display();
         // std::cout<<"\n\n";
     }
     s=positions.empty()?i.second:s;
-    std::cout<<i.first<<s<<"\n";
+    // std::cout<<i.first<<s<<"\n";
     return std::make_pair(i.first,s);
 
 }
 
 // int main(){
 //     Text t;
-//     Cursor c;
 //     t.fillchar('1',{1,1});
-//     c.moveRight(&c);
 //     t.fillchar('2',{1,2});
-//     c.moveRight(&c);
     
 //     // c.moveLeft();
 //     t.fillchar('3',{1,3});
-//     c.moveRight(&c);
     
 //     t.fillchar('4',{1,4});
-//     c.moveRight(&c);
     
 //     t.fillchar('5',{1,5});
-//     c.moveRight(&c);
-//     t.fillchar('0',{1,3});
-//     t.getbuffer().display();
+//     // t.fillchar('0',{1,3});
+//     // t.getbuffer().display();
 //     // t.fillchar('\n',{1,6});
-//     t.fillchar('6',{2,1});
+//     t.fillchar('6',{1,6});
 //     t.getbuffer().display();
-//     t.fillchar('x',{1,2});
+//     // t.fillchar('x',{1,2});
 //     // t.fillchar('7',{2,2});
-//     t.fillchar('7',{2,2});
-//     t.fillchar('8',{2,3});
-//     t.fillchar('y',{1,4});
+//     t.fillchar('7',{1,7});
+//     t.fillchar('8',{2,1});
+//     t.fillchar('9',{2,2});
+//     t.fillchar('a',{2,3});
 
 //     // t.removechar({2,3});
 //     // t.display();
@@ -228,23 +226,23 @@ std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
 //     // t.removechar({2,1});
 //     // // t.display();
 //     // t.getbuffer().display();
-//     t.fillchar('z',{2,1});
-//     t.display();
-//     std::cout<<"\n";
-//     t.copytext({1,3},{2,2});
-//     std::cout<<"\n";
-//     t.fillchar('w',{2,1});
-//     t.display();
+//     // t.fillchar('z',{2,1});
+//     // t.display();
+//     // std::cout<<"\n";
+//     t.copytext({1,2},{2,3});
+//     // std::cout<<"\n";
+//     // t.fillchar('w',{2,1});
+//     // t.display();
 //     std::cout<<"\n Pasted text\n";
 
-//     auto pos=t.pastetext({3,1});
+//     auto pos=t.pastetext({2,3});
     
 //     t.display();
 //     std::cout<<"\n";
 //     // t.getbuffer().display();
 // }
 
-// 1x2y0345
-// 2y0345
-// z6wz678
+// // 1x2y0345
+// // 2y0345
+// // z6wz678
 
