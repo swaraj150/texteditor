@@ -10,7 +10,12 @@ enum eKeys{
     ENTER=13,
     SPACE=32,
     BACKSPACE=8,
-    ESCAPE=27
+    ESCAPE=27,
+    COPY=3,
+    PASTE=22,
+    UNDO=26,
+    REDO=25,
+    CUT=24
 
 };
 class Input{

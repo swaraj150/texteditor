@@ -91,6 +91,18 @@ void Input::userinput(){
             std::cout<<' ';
 
         }
+        else if(key==COPY){
+            std::pair<int,int> pos1={1,2};
+            std::pair<int,int> pos2={2,3};
+            t.copytext(pos1,pos2);
+        }
+        else if(key==PASTE){
+            auto p=t.pastetext(cursor.getCursorPosition());
+            printf("\033[2J");
+            printf("\033[%d;%dH", 1,1);
+            t.display();
+            cursor.setCursorPosition(&cursor,p.first,p.second);
+        }
         else{
             
             t.fillchar((char)key,cursor.getCursorPosition());

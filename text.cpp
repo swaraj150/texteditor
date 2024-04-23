@@ -4,6 +4,7 @@ Text::Text(){
     g=GapBuffer(100);
     ptrs=std::vector<int>(50,-1);
     visited=std::map<int,std::pair<int,int>>();
+    buffer="";
 }
 
 void Text::fillchar(char c1,std::pair<int,int> pos){
@@ -53,8 +54,7 @@ void Text::fillchar(char c1,std::pair<int,int> pos){
             }
         }
     }
-    int y=visited[pos.first].second;
-    y++;
+    
 }
 
 void Text::removechar(std::pair<int,int> pos){
@@ -98,30 +98,112 @@ std::map<int,std::pair<int,int>> Text::getVisited()const{
     return this->visited;
 }
 
+
+void Text::copytext(std::pair<int,int> pos1,std::pair<int,int> pos2){
+    buffer="";
+    auto i=pos1;
+    g.move(visited[pos2.first].first+(pos2.second-1)+1);
+    // g.display();
+    // std::cout<<"\n";
+    while(i.first<=pos2.first){
+        int j=i.second;
+        if(i.first==pos2.first){
+            while(j<=pos2.second){
+                buffer.push_back(g.buffer[visited[i.first].first+(j-1)]);
+                j++;
+            }
+        }
+        else{
+            while(j<visited[i.first].second){
+                buffer.push_back(g.buffer[visited[i.first].first+(j-1)]);
+                j++;
+            }
+            buffer.push_back('\n');
+        }
+
+        i={i.first+1,1};
+    }
+    // std::cout<<"\n"<<buffer<<"\n";
+}
+
+std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
+    if(buffer=="") return pos;
+    auto i=pos;
+    std::vector<std::pair<char,int>> positions;
+    int line=0, flag=0;
+    for(char c:buffer){
+        if(c=='\n'){
+            if(!flag){
+                int j=i.second;
+                line=i.first;
+                int f=visited[i.first].first;
+                int f2=visited[i.first].second;
+                // std::cout<<visited[i.first].first<<" "<<visited[i.first].second<<"\n";
+                int offset=(visited[i.first].second-visited[i.first].first)-(i.second-1);
+                g.move(visited[i.first].first+j+offset-1);
+                // g.display();
+                int n=visited[i.first].first+j+offset-1;
+                for(int k=visited[i.first].first+(j-1);k<n;k++){
+                    char o=g.buffer[k];
+                    positions.push_back({o,j++});
+                }
+                 j=i.second;
+                //  std::cout<<"removing\n";
+
+                while(j<i.second+offset){
+                    removechar(i);
+                    // display();
+                    // std::cout<<"\n\n";
+                    // g.display();
+                    j++;
+                }
+                // std::cout<<"for char c = "<<'*'<<'\n';
+                flag=1;
+                // display();
+                // std::cout<<'\n';
+            }
+            i.first++;
+            i.second=1;
+            continue;
+        }
+        fillchar(c,i);
+        // std::cout<<"for char c = "<<(c=='\n'?'*':c)<<'\n';
+        // display();
+        // std::cout<<'\n';
+        i.second++;
+       
+    }
+    int s=0;
+    for(auto j:positions){
+        char c2=j.first;
+        fillchar(j.first,{i.first,j.second});
+        s=j.second;
+        // display();
+        // std::cout<<"\n\n";
+    }
+    s=positions.empty()?i.second:s;
+    std::cout<<i.first<<s<<"\n";
+    return std::make_pair(i.first,s);
+
+}
+
 // int main(){
 //     Text t;
 //     Cursor c;
-//     // t.setCursor(c);
 //     t.fillchar('1',{1,1});
 //     c.moveRight(&c);
-//     // t.setCursor(c);
 //     t.fillchar('2',{1,2});
 //     c.moveRight(&c);
-//     // t.setCursor(c);
     
 //     // c.moveLeft();
-//     // t.setCursor(c);
 //     t.fillchar('3',{1,3});
 //     c.moveRight(&c);
-//     // t.setCursor(c);
     
 //     t.fillchar('4',{1,4});
 //     c.moveRight(&c);
-//     // t.setCursor(c);
     
 //     t.fillchar('5',{1,5});
 //     c.moveRight(&c);
-//     // t.setCursor(c);
 //     t.fillchar('0',{1,3});
 //     t.getbuffer().display();
 //     // t.fillchar('\n',{1,6});
@@ -133,22 +215,36 @@ std::map<int,std::pair<int,int>> Text::getVisited()const{
 //     t.fillchar('8',{2,3});
 //     t.fillchar('y',{1,4});
 
-//     t.removechar({2,3});
-//     t.display();
-//     std::cout<<"\n";
-//     t.removechar({2,2});
-//     t.display();
-//     std::cout<<"\n";
-//     t.removechar({2,1});
+//     // t.removechar({2,3});
 //     // t.display();
-//     t.getbuffer().display();
-//     std::cout<<"\n";
-//     t.removechar({2,1});
+//     // std::cout<<"\n";
+//     // t.removechar({2,2});
 //     // t.display();
-//     t.getbuffer().display();
-//     std::cout<<"\n";
+//     // std::cout<<"\n";
+//     // t.removechar({2,1});
+//     // // t.display();
+//     // t.getbuffer().display();
+//     // std::cout<<"\n";
+//     // t.removechar({2,1});
+//     // // t.display();
+//     // t.getbuffer().display();
 //     t.fillchar('z',{2,1});
 //     t.display();
-//     // std::cout<<"\n";
+//     std::cout<<"\n";
+//     t.copytext({1,3},{2,2});
+//     std::cout<<"\n";
+//     t.fillchar('w',{2,1});
+//     t.display();
+//     std::cout<<"\n Pasted text\n";
+
+//     auto pos=t.pastetext({3,1});
+    
+//     t.display();
+//     std::cout<<"\n";
 //     // t.getbuffer().display();
 // }
+
+// 1x2y0345
+// 2y0345
+// z6wz678
+
