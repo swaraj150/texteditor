@@ -1,2 +1,15 @@
-1234567
-89abcf
+Graph questions
+
+1] Let G be an undirected graph. Consider a depth-first traversal of G
+
+{u,v} must be an edge in G, and u is a descendant of v in T
+
+{u,v} must be an edge in G, and v is a descendant of u in T
+
+If {u,v} is not an edge in G then u is a leaf in T
+	
+If {u,v} is not an edge in G then u and v must have the same parent in T
+If {u,v} is not an edge in G then u and v must have the same parent in If {u,v} is not an edge in G then u and v must have the same parent in TT
+
+
+

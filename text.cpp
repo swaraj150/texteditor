@@ -1,7 +1,8 @@
 #include "text.h"
+#include<fstream>
 Text::Text(){
     // c=Cursor();
-    g=GapBuffer(100);
+    g=GapBuffer(1000);
     ptrs=std::vector<int>(50,-1);
     visited=std::map<int,std::pair<int,int>>();
     buffer="";
@@ -16,6 +17,25 @@ void Text::fillchar(char c1,std::pair<int,int> pos){
             
             // g.insert(g.left,'\n');
             int x2=visited[pos.first-1].second;
+            int i=0;
+            std::pair<int,int> prev={};
+            while(x2==0){
+                prev=visited[pos.first-1-i];
+                x2=visited[pos.first-1-i].second;
+                i++;
+            }
+            // i++;
+            if(i>0){
+                i--;
+                g.insert(visited[pos.first-1-i].second,'\n');
+                while(i--){
+                    int a1=pos.first-1-i;
+                    visited[pos.first-1-i]={prev.second+1,prev.second+1};
+                    g.insert(visited[pos.first-1-i].second,'\n');
+                    ptrs[pos.first-1-i]=prev.second+1;
+                    prev=visited[pos.first-1-i];
+                }
+            }
             g.insert(visited[pos.first-1].second,'\n');
             
             ptrs[pos.first]=visited[pos.first-1].second+1;
@@ -123,7 +143,6 @@ void Text::copytext(std::pair<int,int> pos1,std::pair<int,int> pos2){
 
         i={i.first+1,1};
     }
-    // std::cout<<"\n"<<buffer<<"\n";
 }
 
 std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
@@ -143,7 +162,7 @@ std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
                 // std::cout<<visited[i.first].first<<" "<<visited[i.first].second<<"\n";
                 int offset=(visited[i.first].second-visited[i.first].first)-(i.second-1);
                 g.move(visited[i.first].first+j+offset-1);
-                g.display();
+                // g.display();
                 int n=visited[i.first].first+j+offset-1;
                 for(int k=visited[i.first].first+(j-1);k<n;k++){
                     char o=g.buffer[k];
@@ -190,29 +209,53 @@ std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
 
 }
 
+void h(Text* t){
+    std::ifstream f("test.txt");
+    char c;
+    int i=1,j=1;
+    
+    while(f.get(c)){
+        // std::cout<<c;
+        if(c=='\n'){
+            i++;
+            j=1;
+            // t.display()
+            // std::cout<<"\n";;
+            continue;
+        }
+        t->fillchar(c,{i,j});
+        // std::cout<<"\n";
+        // t->getbuffer().display();
+        // std::cout<<"\n";
+        // std::cout<<c;
+        j++;
+    }
+}
+
+
 // int main(){
 //     Text t;
-//     t.fillchar('1',{1,1});
-//     t.fillchar('2',{1,2});
-    
+//     h(&t);
+//     // t.getbuffer().display();
+//         // t.fillchar('1',{1,1});
+//         // t.fillchar('2',{1,2});
 //     // c.moveLeft();
-//     t.fillchar('3',{1,3});
-    
-//     t.fillchar('4',{1,4});
-    
-//     t.fillchar('5',{1,5});
+//         // t.fillchar('3',{1,3});
+//         // t.fillchar('4',{1,4});
+//         // t.fillchar('5',{1,5});
 //     // t.fillchar('0',{1,3});
 //     // t.getbuffer().display();
 //     // t.fillchar('\n',{1,6});
-//     t.fillchar('6',{1,6});
-//     t.getbuffer().display();
+//         // t.fillchar('6',{1,6});
+//         // t.getbuffer().display();
 //     // t.fillchar('x',{1,2});
 //     // t.fillchar('7',{2,2});
-//     t.fillchar('7',{1,7});
-//     t.fillchar('8',{2,1});
-//     t.fillchar('9',{2,2});
-//     t.fillchar('a',{2,3});
-
+    
+//         // t.fillchar('7',{1,7});
+//         // t.fillchar('8',{2,1});
+//         // t.fillchar('9',{2,2});
+//         // t.fillchar('a',{2,3});
+    
 //     // t.removechar({2,3});
 //     // t.display();
 //     // std::cout<<"\n";
@@ -229,20 +272,15 @@ std::pair<int,int> Text::pastetext(std::pair<int,int> pos){
 //     // t.fillchar('z',{2,1});
 //     // t.display();
 //     // std::cout<<"\n";
-//     t.copytext({1,2},{2,3});
+//     // t.copytext({1,2},{2,3});
 //     // std::cout<<"\n";
 //     // t.fillchar('w',{2,1});
 //     // t.display();
-//     std::cout<<"\n Pasted text\n";
-
-//     auto pos=t.pastetext({2,3});
-    
+//     // std::cout<<"\n Pasted text\n";
+//     // auto pos=t.pastetext({2,3});
 //     t.display();
-//     std::cout<<"\n";
+//     // std::cout<<"\n";
 //     // t.getbuffer().display();
 // }
 
-// // 1x2y0345
-// // 2y0345
-// // z6wz678
 

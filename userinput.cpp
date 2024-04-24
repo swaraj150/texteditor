@@ -13,7 +13,8 @@ eKeys Input::getKeys() const{
 
 void Input::userinput(){
     
-
+    std::pair<int,int> pos1={-1,-1};
+    std::pair<int,int> pos2={-1,-1};
     std::cout << "\033["<< "@";
     while(true){
         #ifdef _WIN32
@@ -79,11 +80,6 @@ void Input::userinput(){
             if(x2==x1){
                 cursor.setCursorPosition(&cursor,pos.first-1,x2-1);
             }
-            // if(!t.getVisited().count(cursor.getCursorPosition().first)){
-            //     cursor.setCursorPosition(&cursor,t.getVisited()[cursor.getCursorPosition().first].first,t.getVisited()[cursor.getCursorPosition().first].second);
-            // }
-
-            
         }
         else if(key==SPACE){
             t.fillchar(' ',cursor.getCursorPosition());
@@ -91,10 +87,15 @@ void Input::userinput(){
             std::cout<<' ';
 
         }
+        else if(key==START){
+            pos1=cursor.getCursorPosition();
+        }
+        else if(key==END){
+            pos2=cursor.getCursorPosition();
+        }
         else if(key==COPY){
-            std::pair<int,int> pos1={1,2};
-            std::pair<int,int> pos2={2,3};
-            t.copytext(pos1,pos2);
+            if(pos1.first!=-1 && pos2.first!=-1)
+                t.copytext(pos1,pos2);
         }
         else if(key==PASTE){
             auto p=t.pastetext(cursor.getCursorPosition());
@@ -102,6 +103,19 @@ void Input::userinput(){
             printf("\033[%d;%dH", 1,1);
             t.display();
             cursor.setCursorPosition(&cursor,p.first,p.second);
+            saveState(t,cursor);
+        }
+        else if(key==UNDO){
+            undo(t,cursor);
+            printf("\033[2J");
+            printf("\033[%d;%dH", 1,1);
+            t.display();
+        }
+        else if(key==REDO){
+            redo(t,cursor);
+            printf("\033[2J");
+            printf("\033[%d;%dH", 1,1);
+            t.display();
         }
         else{
             
@@ -109,12 +123,11 @@ void Input::userinput(){
             cursor.moveRight(&cursor);
             std::cout << "\033[" << 1 << "@";
             std::cout<<(char)key; 
+            saveState(t,cursor);
 
             
         }
     }
-
-    // t.getbuffer().display();
     
 }
 
@@ -133,4 +146,27 @@ Cursor Input::getCursor()const{
 
 void Input::setCursor(Cursor c){
     cursor=c;
+}
+
+void Input::saveState(Text t,Cursor c){
+    redoStack=std::stack<std::pair<Text,Cursor>>();
+    undoStack.push(std::make_pair(t,c));
+}
+void Input::undo(Text &t,Cursor &c){
+    if(!undoStack.empty()){
+        redoStack.push(std::make_pair(t,c));
+        t=undoStack.top().first;
+        c=undoStack.top().second;
+        undoStack.pop();
+    }
+
+}
+void Input::redo(Text &t,Cursor &c){
+    if(!redoStack.empty()){
+        undoStack.push(std::make_pair(t,c));
+        t=redoStack.top().first;
+        c=redoStack.top().second;
+        redoStack.pop();
+    }
+
 }

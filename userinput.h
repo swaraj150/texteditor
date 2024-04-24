@@ -1,4 +1,5 @@
 #pragma once
+#include<stack>
 #include "text.h"
 #include "cursor.h"
 enum eKeys{
@@ -15,7 +16,9 @@ enum eKeys{
     PASTE=22,
     UNDO=26,
     REDO=25,
-    CUT=24
+    CUT=24,
+    START=49,
+    END=50
 
 };
 class Input{
@@ -23,9 +26,15 @@ class Input{
         Text t;
         Cursor cursor;
         eKeys keys;
+        std::stack<std::pair<Text,Cursor>> undoStack;
+        std::stack<std::pair<Text,Cursor>> redoStack;
+        
     public:
         Input();
         eKeys getKeys()const;
+        void saveState(Text t,Cursor c);
+        void undo(Text &t,Cursor &c);
+        void redo(Text &t,Cursor &c);
         void userinput();
         Text getText()const;
         void setText(Text t);

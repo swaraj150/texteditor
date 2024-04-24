@@ -28,7 +28,7 @@ std::pair<int,int> FileHandle::loadFile(std::string path){
     int i=1,j=1;
     
     while(f.get(c)){
-        // std::cout<<c;
+        std::cout<<c;
         if(c=='\n'){
             i++;
             j=1;
@@ -39,7 +39,7 @@ std::pair<int,int> FileHandle::loadFile(std::string path){
         j++;
     }
     // std::cout<<"from loadfile\n";
-    text.display();
+    // text.display();
     
     return std::make_pair(i,j);
     

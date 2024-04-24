@@ -6,6 +6,7 @@
 TextEditor::TextEditor(){
     fileHandle=FileHandle();
     input=Input();
+    
 }
 
 void TextEditor::run(std::string filename){
@@ -15,6 +16,7 @@ void TextEditor::run(std::string filename){
     auto cursor=fileHandle.loadFile(filename);
     input.setText(fileHandle.getText());
     input.setCursor(Cursor(cursor.first,cursor.second));
+    input.saveState(input.getText(),input.getCursor());
     input.userinput();
     std::cout<<"\033[2J";
     
@@ -30,3 +32,8 @@ void TextEditor::run(std::string filename){
     } 
     
 }
+
+// int main(){
+//     TextEditor t;
+//     t.run("test");
+// }
