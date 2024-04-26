@@ -25,18 +25,23 @@ void Text::fillchar(char c1,std::pair<int,int> pos){
                 i++;
             }
             // i++;
+            int l=0;
             if(i>0){
                 i--;
+                x2=visited[pos.first-1-i].second;
                 g.insert(visited[pos.first-1-i].second,'\n');
+                l++;    
                 while(i--){
                     int a1=pos.first-1-i;
                     visited[pos.first-1-i]={prev.second+1,prev.second+1};
                     g.insert(visited[pos.first-1-i].second,'\n');
+                    l++;
                     ptrs[pos.first-1-i]=prev.second+1;
                     prev=visited[pos.first-1-i];
                 }
             }
-            g.insert(visited[pos.first-1].second,'\n');
+            if(c1!='\n') g.insert(visited[pos.first-1].second,'\n');
+            
             
             ptrs[pos.first]=visited[pos.first-1].second+1;
             // whether to include \n in a line or not
@@ -49,6 +54,7 @@ void Text::fillchar(char c1,std::pair<int,int> pos){
         visited[pos.first]={ptrs[pos.first],ptrs[pos.first]};
         // visited[pos.first]={g.left,g.left};
         g.insert(visited[pos.first].second,c1);
+        
         int x1=visited[pos.first].second;
         visited[pos.first].second++;
     }
@@ -104,9 +110,15 @@ void Text::fillstring(std::string str){
 }
 
 void Text::display(){
+    int i=1;
     for(char c1:g.buffer){
+        // if(i==1 || c1=='\n'){
+        //     std::cout<<i<<" ";
+        //     i++;
+        // }
         if(c1!='_')
             std::cout<<c1;
+        
         
     }
 }
@@ -213,22 +225,61 @@ void h(Text* t){
     std::ifstream f("test.txt");
     char c;
     int i=1,j=1;
+    int k=0;
     
     while(f.get(c)){
         // std::cout<<c;
         if(c=='\n'){
+            // std::cout<<"\n";
+            // t->getbuffer().display();
+            // std::cout<<"\n";
+            // t->fillchar(c,{i,j});
+            // k++;
             i++;
             j=1;
+            k++;
+            
+            
             // t.display()
             // std::cout<<"\n";;
             continue;
-        }
+            
+        } 
         t->fillchar(c,{i,j});
-        // std::cout<<"\n";
-        // t->getbuffer().display();
-        // std::cout<<"\n";
-        // std::cout<<c;
+        k=0;
+        // k=0;
+        std::cout<<"\n";
+        t->getbuffer().display();
+        std::cout<<"\n";
+        // // std::cout<<c;
         j++;
+    }
+    if(k>0){
+        t->fillchar('\n',{i,j});
+        
+    }
+
+    t->display();
+    // std::cout<<"\n";
+    auto m=t->getVisited();
+    for(auto &x:m){
+        std::cout<<x.first<<" - {"<<x.second.first<<","<<x.second.second<<"\n";
+    }
+}
+
+
+void back(Text &t,Cursor &cursor){
+    std::cout << "\b \b";     
+    cursor.moveLeft(&cursor);
+    auto visited=t.getVisited();
+    auto pos=cursor.getCursorPosition();
+    
+    int x2=visited[pos.first].second;
+    int x1=visited[pos.first].first;
+    
+    t.removechar(cursor.getCursorPosition());
+    if(x2==x1){
+        cursor.setCursorPosition(&cursor,pos.first-1,x2-1);
     }
 }
 
@@ -278,7 +329,15 @@ void h(Text* t){
 //     // t.display();
 //     // std::cout<<"\n Pasted text\n";
 //     // auto pos=t.pastetext({2,3});
-//     t.display();
+
+
+//     // t.display();
+//     // // std::cout<<"\n";
+//     // auto m=t.getVisited();
+//     // for(auto &x:m){
+//     //     std::cout<<x.first<<" - {"<<x.second.first<<","<<x.second.second<<"\n";
+//     // }
+    
 //     // std::cout<<"\n";
 //     // t.getbuffer().display();
 // }

@@ -39,8 +39,12 @@ void Input::userinput(){
             }
             //down
             case DOWN:{
-                cursor.moveDown(&cursor);
-                std::cout<<"\033[B";
+                auto p1=cursor.getCursorPosition();
+                auto visited=t.getVisited();
+                if(visited.count(p1.first+1)){
+                    cursor.moveDown(&cursor);
+                    std::cout<<"\033[B";
+                }
                 break;
             }
                 
@@ -52,8 +56,12 @@ void Input::userinput(){
             }
             //right
             case RIGHT:{
-                cursor.moveRight(&cursor);
-                std::cout<<"\033[C";
+                auto p1=cursor.getCursorPosition();
+                auto visited=t.getVisited();
+                if(visited.count(p1.first) && (visited[p1.first].first+p1.second-1)<visited[p1.first].second){
+                    cursor.moveRight(&cursor);
+                    std::cout<<"\033[C";
+                }
                 break;
             }
             default:
@@ -70,12 +78,12 @@ void Input::userinput(){
             
             std::cout << "\b \b";
             
-            cursor.moveLeft(&cursor); 
+            cursor.moveLeft(&cursor);
             auto visited=t.getVisited();
             auto pos=cursor.getCursorPosition();
+            
             int x2=visited[pos.first].second;
             int x1=visited[pos.first].first;
-            
             t.removechar(cursor.getCursorPosition());
             if(x2==x1){
                 cursor.setCursorPosition(&cursor,pos.first-1,x2-1);

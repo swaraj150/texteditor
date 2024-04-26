@@ -26,20 +26,42 @@ std::pair<int,int> FileHandle::loadFile(std::string path){
     std::ifstream f(path+".txt");
     char c;
     int i=1,j=1;
+    int k=0;
     
     while(f.get(c)){
-        std::cout<<c;
+        // std::cout<<c;
         if(c=='\n'){
+            // std::cout<<"\n";
+            // t->getbuffer().display();
+            // std::cout<<"\n";
+            // t->fillchar(c,{i,j});
+            // k++;
             i++;
             j=1;
+            k++;
+            
+            
+            // t.display()
+            // std::cout<<"\n";;
             continue;
-        }
-        text.fillchar(c,{i,j});
-        // std::cout<<c;
+            
+        } 
+       text.fillchar(c,{i,j});
+        k=0;
+        // k=0;
+        // std::cout<<"\n";
+        // t->getbuffer().display();
+        // std::cout<<"\n";
+        // // std::cout<<c;
         j++;
     }
+    if(k>0){
+        text.fillchar('\n',{i,j});
+        i++;
+    }
+   
     // std::cout<<"from loadfile\n";
-    // text.display();
+    
     
     return std::make_pair(i,j);
     
